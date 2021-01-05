@@ -6,7 +6,7 @@ services:
     container_name: mariadb-microcenter
     restart: unless-stopped
     ports:
-      - '3308:3306'
+      - 3308:3306
     environment:
       - MYSQL_ROOT_PASSWORD=4QADjDwZzo60YDpg
       - MYSQL_USER=microcenter
@@ -16,16 +16,21 @@ services:
       - traefik.enable = false
     networks:
       - microcenter
-  apache-superset:
-    image: apache/incubator-superset
+    volumes:
+    - mysql:/var/lib/mysql
+  splunk:
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    container_name: splunk
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=J1T3bH8rVOd71ABt
+      - SPLUNK_LICENSE_URI=Free
     ports:
-    - 8090:8080
-    container_name: microcenter-superset
-    labels:
-      - traefik.enable = true
-      - traefik.docker.network = microcenter
+      - 1921:8000
     networks:
       - microcenter
+    labels:
+      - traefik.enable = true
   selenium-microcenter:
     container_name: selenium-microcenter
     image:
@@ -43,7 +48,17 @@ services:
     restart: unless-stopped
     networks:
       - microcenter
-
+  microcenter-discord-bot:
+    image:
+      microcenter-discord-bot
+    container_name: microcenter-discord-bot
+    restart: unless-stopped
+    environment:
+      DISCORD_TOKEN: 'REPLACE THIS WITH YOURS'
+    networks:
+      - microcenter
 networks:
   microcenter:
     driver: bridge
+volumes:
+  mysql:
