@@ -125,6 +125,28 @@ FirefoxOptions options = new FirefoxOptions();
 Url url = new URL("http://localhost:4444")
 WebDriver driver = new RemoteWebDriver(url , options);
 ```
+Kotlin Code with docker run 
+````kotlin
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.WebDriver;
+import java.net.URL;
+
+val options = FirefoxOptions()
+val url = URL("http://localhost:4444")
+val driver = RemoteWebDriver(url, options)
+````
+Kotlin Code with docker compose
+````kotlin
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.WebDriver;
+import java.net.URL;
+
+val options = FirefoxOptions()
+val url = URL("http://selenium-appname:4444")
+val driver = RemoteWebDriver(url, options)
+````
 Dockerfile must be put in ./Dockerfile
 ```DOCKERFILE
 FROM gradle:5.3.0-jdk-alpine AS TEMP_BUILD_IMAGE
@@ -178,6 +200,49 @@ task fatJar(type: Jar) {
     with jar
 }
 ```
+For a kotlin build.gradle.kts script do
+```
+import org.gradle.jvm.tasks.Jar
+
+plugins {
+    java
+    kotlin("jvm") version "1.4.31"
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+    testCompile("junit", "junit", "4.12")
+    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
+    compile ("org.seleniumhq.selenium", "selenium-java", "3.141.59")
+    compile ("mysql", "mysql-connector-java", "5.1.13")
+}
+
+
+val fatJar = task("fatJar", type = Jar::class) {
+    baseName = "${project.name}-fat"
+    manifest {
+        attributes["Implementation-Title"] = "Gradle Jar File Example"
+        attributes["Implementation-Version"] = version
+        attributes["Main-Class"] = "com.mkyong.DateUtils"
+    }
+    from(configurations.runtimeClasspath.get().map({ if (it.isDirectory) it else zipTree(it) }))
+    with(tasks.jar.get() as CopySpec)
+}
+
+tasks {
+    "build" {
+        dependsOn(fatJar)
+    }
+}
+```
 
 With docker run
 ```BASH
@@ -209,7 +274,7 @@ networks:
 ```
 For Docker-Compose build docker container and run docker-compose (Python)
 ```BASH
-build-custom-java-selenium-app.bash
+bash build-custom-java-selenium-app.bash
 ```
 Contents of that file (Java)
 ```BASH
