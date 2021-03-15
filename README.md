@@ -200,47 +200,38 @@ task fatJar(type: Jar) {
     with jar
 }
 ```
-For a kotlin build.gradle.kts script do
+build.gradle that includes kotlin code. Must create a fatJar (Replace PACKAGENAME.MAINCLASS with you're packagename.mainclass)
 ```
-import org.gradle.jvm.tasks.Jar
-
 plugins {
-    java
-    kotlin("jvm") version "1.4.31"
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group 'org.example'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-    testCompile("junit", "junit", "4.12")
-    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
-    compile ("org.seleniumhq.selenium", "selenium-java", "3.141.59")
-    compile ("mysql", "mysql-connector-java", "5.1.13")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+
 }
 
+compileKotlin {
+      kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin { kotlinOptions.jvmTarget = "1.8" }
 
-val fatJar = task("fatJar", type = Jar::class) {
-    baseName = "${project.name}-fat"
+fatJar {
     manifest {
-        attributes["Implementation-Title"] = "Gradle Jar File Example"
-        attributes["Implementation-Version"] = version
-        attributes["Main-Class"] = "com.mkyong.DateUtils"
+        attributes 'Main-Class': 'PACKAGE.MAINCLASSNAME'
     }
-    from(configurations.runtimeClasspath.get().map({ if (it.isDirectory) it else zipTree(it) }))
-    with(tasks.jar.get() as CopySpec)
-}
-
-tasks {
-    "build" {
-        dependsOn(fatJar)
-    }
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 ```
 

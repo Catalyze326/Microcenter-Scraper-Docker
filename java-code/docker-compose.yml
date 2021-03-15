@@ -1,6 +1,25 @@
+version: '2.1'
+
 services:
-  selenium-appname:
-    container_name: selenium-appname
+  mariadb:
+    image: mariadb
+    container_name: mariadb-microcenter
+    restart: unless-stopped
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=4QADjDwZzo60YDpg
+      - MYSQL_USER=microcenter
+      - MYSQL_PASSWORD=2Pn36D3iM8vnTAul
+      - MYSQL_DATABASE=microcenter
+    labels:
+      - traefik.enable = false
+    networks:
+      - microcenter
+    volumes:
+      - mysql:/var/lib/mysql
+  selenium-microcenter:
+    container_name: selenium-microcenter
     image:
       selenium/standalone-firefox:4.0.0-beta-1-prerelease-20201208
     ports:
@@ -8,14 +27,16 @@ services:
     volumes:
       - /dev/shm:/dev/shm
     networks:
-      - network-name
-  java-app:
+      - microcenter
+  microcenter-java:
     image:
-      java-app
-    container_name: java-app
+      microcenter-java
+    container_name: microcenter-java
     restart: unless-stopped
     networks:
-      - network-name
+      - microcenter
 networks:
-  network-name:
+  microcenter:
     driver: bridge
+volumes:
+  mysql:
