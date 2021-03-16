@@ -48,15 +48,15 @@ services:
     restart: unless-stopped
     networks:
       - microcenter
-  microcenter-discord-bot:
-    image:
-      microcenter-discord-bot
-    container_name: microcenter-discord-bot
-    restart: unless-stopped
-    environment:
-      DISCORD_TOKEN: 'REPLACE THIS WITH YOURS'
-    networks:
-      - microcenter
+#  microcenter-discord-bot:
+#    image:
+#      microcenter-discord-bot
+#    container_name: microcenter-discord-bot
+#    restart: unless-stopped
+#    environment:
+#      DISCORD_TOKEN: 'REPLACE THIS WITH YOURS'
+#    networks:
+#      - microcenter
 networks:
   microcenter:
     driver: bridge
