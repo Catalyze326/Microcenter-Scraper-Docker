@@ -119,11 +119,12 @@ def update_new(open_box, u_values):
 
 time.sleep(12)
 print("Initiating code:")
-firefox_options = webdriver.FirefoxOptions()
+chrome_options = webdriver.ChromeOptions()
 driver = webdriver.Remote(
     command_executor='http://selenium-microcenter:4444',
-    options=firefox_options
+    options=chrome_options
 )
+
 connection = mysql.connector.connect(
     user='microcenter', password='2Pn36D3iM8vnTAul',
     host='mariadb-microcenter', database='microcenter')

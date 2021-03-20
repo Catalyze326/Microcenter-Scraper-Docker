@@ -1,6 +1,7 @@
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -18,8 +19,10 @@ class Scrape {
 //        val options = FirefoxOptions()
 //        val url = URL("http://selenium-microcenter:4444")
 //        val driver = RemoteWebDriver(url, options)
-        val driver = FirefoxDriver()
-        driver.get("https://www.microcenter.com/search/search_results.aspx?Ntk=all&sortby=match&N=44+42+40+41+37+23+36+38+39+22+43+24+46+47+45&myStore=true")
+//        val driver = FirefoxDriver()
+        val chromeOptions = ChromeOptions()
+        val driver = RemoteWebDriver(URL("http://selenium-microcenter:4444"), chromeOptions)
+        driver.get("https://www.google.com")
         val ec = ExpectedConditions.visibilityOfElementLocated(By.id("storeInfo"))
         WebDriverWait(driver, 10).until(ec)
         val listOfSites = driver.findElements(By.className("dropdown-itemLI"))
