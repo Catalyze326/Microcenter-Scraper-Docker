@@ -26,7 +26,7 @@ from selenium import webdriver
 
 firefox_options = webdriver.FirefoxOptions()
 driver = webdriver.Remote(
-    command_executor='http://selenium-appname:4444',
+    command_executor='http://selenium-appname:4444/wd/hub',
     options=firefox_options
 )
 ```
@@ -36,7 +36,7 @@ from selenium import webdriver
 
 firefox_options = webdriver.FirefoxOptions()
 driver = webdriver.Remote(
-    command_executor='http://localhost:4444',
+    command_executor='http://localhost:4444/wd/hub',
     options=firefox_options
 )
 ```
@@ -111,7 +111,7 @@ import org.openqa.selenium.WebDriver;
 import java.net.URL;
 
 FirefoxOptions options = new FirefoxOptions();
-Url url = new URL("http://selenium-appname:4444")
+Url url = new URL("http://selenium-appname:4444/wd/hub")
 WebDriver driver = new RemoteWebDriver(url , options);
 ```
 Java Code with docker run
@@ -122,7 +122,7 @@ import org.openqa.selenium.WebDriver;
 import java.net.URL;
 
 FirefoxOptions options = new FirefoxOptions();
-Url url = new URL("http://localhost:4444")
+Url url = new URL("http://localhost:4444/wd/hub")
 WebDriver driver = new RemoteWebDriver(url , options);
 ```
 Kotlin Code with docker run 
@@ -133,7 +133,7 @@ import org.openqa.selenium.WebDriver;
 import java.net.URL;
 
 val options = FirefoxOptions()
-val url = URL("http://localhost:4444")
+val url = URL("http://localhost:4444/wd/hub")
 val driver = RemoteWebDriver(url, options)
 ````
 Kotlin Code with docker compose
@@ -144,7 +144,7 @@ import org.openqa.selenium.WebDriver;
 import java.net.URL;
 
 val options = FirefoxOptions()
-val url = URL("http://selenium-appname:4444")
+val url = URL("http://selenium-appname:4444/wd/hub")
 val driver = RemoteWebDriver(url, options)
 ````
 Dockerfile must be put in ./Dockerfile

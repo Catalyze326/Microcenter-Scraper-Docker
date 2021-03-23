@@ -39,6 +39,7 @@ class Scrape {
         val category = item.getAttribute("data-category")
         val url: String = item.getAttribute("href")
         return arrayOf(name, price, brand, category, url, store)
+
     }
 
     private fun send_to_db(values: Array<String>) {
